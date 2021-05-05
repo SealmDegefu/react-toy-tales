@@ -38,35 +38,56 @@ class App extends React.Component {
       );
   };
 
-  like = (newLike) => {
+  // like = (newLike) => {
     
-    let patchOPtion = {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-        Accepts: "application/json",
-      },
-      body: JSON.stringify(newLike),
-    };
+  //   let patchOPtion = {
+  //     method: "PATCH",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       Accepts: "application/json",
+  //     },
+  //     body: JSON.stringify(newLike),
+  //   };
 
-    fetch(" http://localhost:3000/toys/" + newLike.id, patchOPtion)
+  //   fetch(" http://localhost:3000/toys/" + newLike.id, patchOPtion)
      
-  };
+  // };
 
-  handleLikeClick = (event) =>{
-    let likeIndex = event.parentNode.id - 1
-   let newLikes = [...this.state.toys]
+//   handleLikeClick = (event) =>{
+//     let likeIndex = event.parentNode.id - 1
+//    let newLikes = [...this.state.toys]
 
-   let toyLikes = (newLikes[likeIndex])
-   ++toyLikes.likes
+//    let toyLikes = (newLikes[likeIndex])
+//    ++toyLikes.likes
 
-this.like(toyLikes)
+// this.like(toyLikes)
 
-   newLikes = toyLikes
-    console.log(newLikes)
+//    newLikes = toyLikes
+//     console.log(newLikes)
     
-    this.setState(newLikes = toyLikes)
-  }
+//     this.setState(newLikes = toyLikes)
+//   }
+
+handleLikeClick = (toyObject) =>{
+let updatedLikes = {
+  ...toyObject, likes: toyObject.likes + 1
+}
+let patchOPtion = {
+  method: "PATCH",
+  headers: {
+    "Content-Type": "application/json",
+    Accepts: "application/json",
+  },
+  body: JSON.stringify(updatedLikes)
+}
+
+fetch(" http://localhost:3000/toys/" + toyObject.id, patchOPtion)
+.then(res => res.json())
+.then(updatedToy => {
+  let newToyArray = this.state.toys.map(toy => toy.id === toyObject.id ? toy = updatedLikes : toy)
+  this.setState({toys: newToyArray})
+})
+}
 
   deleteToy = (id) => {
     fetch(" http://localhost:3000/toys/" + id, {
